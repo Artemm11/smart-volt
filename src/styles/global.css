@@ -638,7 +638,7 @@ a {
 
 /* Footer Section */
 .footer {
-  background-image: linear-gradient(rgba(18, 24, 33, 0.94), rgba(18, 24, 33, 0.94)), url('/images/dark_concrete_footer.png');
+  background-image: linear-gradient(rgba(18, 24, 33, 0.94), rgba(18, 24, 33, 0.94)), url('/images/tech_footer_bg.png');
   background-size: cover;
   background-position: center;
   color: hsl(220, 15%, 75%);
