@@ -1,0 +1,10 @@
+{
+  "siteName": "SmartВольт",
+  "siteDescription": "Информационный портал со статьями об электрике, освещении, системах умного дома и гаджетах.",
+  "telegramBotToken": "",
+  "telegramChatId": "",
+  "sidebarBannerTitle": "Рассчитать стоимость электрики",
+  "sidebarBannerText": "Получите расчет стоимости умного дома или электромонтажных работ под ключ!",
+  "sidebarBannerLink": "/#contact",
+  "sidebarBannerButtonText": "Рассчитать стоимость"
+}
