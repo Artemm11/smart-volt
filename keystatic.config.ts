@@ -11,7 +11,7 @@ export default config({
         kind: 'local',
       },
   cloud: {
-    project: 'test3/astro-keystatic-blog',
+    project: 'sovet-stroitelya/smart-volt',
   },
   collections: {
     categories: collection({
@@ -118,11 +118,11 @@ export default config({
       path: 'src/content/settings/index',
       format: { data: 'json' },
       schema: {
-        siteName: fields.text({ label: 'Название сайта', defaultValue: 'МастерБлог' }),
+        siteName: fields.text({ label: 'Название сайта', defaultValue: 'SmartВольт' }),
         siteDescription: fields.text({
           label: 'Описание сайта (для SEO)',
           multiline: true,
-          defaultValue: 'Информационный портал со статьями о строительстве, ремонте, сантехнике и дизайне.'
+          defaultValue: 'Информационный портал со статьями об электрике, освещении, системах умного дома и гаджетах.'
         }),
         telegramBotToken: fields.text({
           label: 'Токен Telegram-бота (для заявок)',
