@@ -37,6 +37,14 @@ const formatDate = (date: Date) => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{settings.siteName} — {homepage.title}</title>
   <meta name="description" content={settings.siteDescription}>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={Astro.url} />
+  <meta property="og:title" content={`${settings.siteName} — ${homepage.title}`} />
+  <meta property="og:description" content={settings.siteDescription} />
+  <meta property="og:image" content={new URL('/images/bright_hero.png', Astro.url)} />
 </head>
 <body>
   
@@ -169,6 +177,13 @@ const formatDate = (date: Date) => {
         ))
       )}
     </div>
+
+    <!-- Pagination -->
+    <div id="pagination-container" style="text-align: center; margin-top: 2.5rem; display: none;">
+      <button id="load-more-btn" class="btn-submit" style="display: inline-flex; width: auto; padding: 0.8rem 2.5rem; margin: 0 auto; border-radius: var(--radius-sm); border: 1px solid var(--accent); cursor: pointer; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+        <span>Показать еще</span>
+      </button>
+    </div>
   </main>
 
   <!-- Feedback Form Section -->
@@ -186,6 +201,10 @@ const formatDate = (date: Date) => {
           <label class="form-label" for="form-contact">Телефон или Email</label>
           <input class="form-input" type="text" id="form-contact" placeholder="+7 (999) 123-45-67" required />
         </div>
+      </div>
+      <div class="form-group" style="display: none;" aria-hidden="true">
+        <label for="form-honey">Оставьте это поле пустым</label>
+        <input type="text" id="form-honey" name="honey" tabindex="-1" autocomplete="off" />
       </div>
       <div class="form-group">
         <label class="form-label" for="form-message">Сообщение</label>
@@ -245,7 +264,7 @@ const formatDate = (date: Date) => {
         </div>
       </div>
       <div class="footer-bottom">
-        <p>© 2026 {settings.siteName}. Все права защищены.</p>
+        <p>© {new Date().getFullYear()} {settings.siteName}. Все права защищены.</p>
         <div style="display: flex; gap: 1.5rem;">
           <a href="/">Главная</a>
           <a href="/keystatic">Админ-панель</a>
@@ -273,6 +292,16 @@ const formatDate = (date: Date) => {
         const name = (document.getElementById('form-name') as HTMLInputElement).value;
         const contact = (document.getElementById('form-contact') as HTMLInputElement).value;
         const message = (document.getElementById('form-message') as HTMLTextAreaElement).value;
+        const honey = (document.getElementById('form-honey') as HTMLInputElement).value;
+
+        // Honeypot spam protection
+        if (honey) {
+          if (form) (form as HTMLFormElement).reset();
+          if (modal) modal.classList.add('active');
+          if (submitBtn) (submitBtn as HTMLButtonElement).disabled = false;
+          if (spinner) (spinner as HTMLElement).style.display = 'none';
+          return;
+        }
 
         try {
           const response = await fetch('/api/contact', {
@@ -280,7 +309,7 @@ const formatDate = (date: Date) => {
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name, contact, message })
+            body: JSON.stringify({ name, contact, message, honey })
           });
 
           const result = await response.json();
@@ -311,12 +340,52 @@ const formatDate = (date: Date) => {
     }
   </script>
 
-  <!-- Instant Client-side Filter & Hash Navigation Script -->
+  <!-- Instant Client-side Filter, Hash Navigation & Pagination Script -->
   <script>
     const filterButtons = document.querySelectorAll('.filter-btn');
     const posts = document.querySelectorAll('#posts-grid article');
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const paginationContainer = document.getElementById('pagination-container');
+
+    const POSTS_PER_PAGE = 6;
+    let currentLimit = POSTS_PER_PAGE;
+    let currentCategory = 'all';
+
+    function updatePostsVisibility() {
+      let visibleCount = 0;
+      let totalMatching = 0;
+
+      posts.forEach(post => {
+        const postCategory = post.getAttribute('data-post-category');
+        const matchesCategory = currentCategory === 'all' || postCategory === currentCategory;
+
+        if (matchesCategory) {
+          totalMatching++;
+          if (visibleCount < currentLimit) {
+            (post as HTMLElement).style.display = 'flex';
+            visibleCount++;
+          } else {
+            (post as HTMLElement).style.display = 'none';
+          }
+        } else {
+          (post as HTMLElement).style.display = 'none';
+        }
+      });
+
+      // Show/hide "Load More" button container
+      if (loadMoreBtn && paginationContainer) {
+        if (visibleCount < totalMatching) {
+          paginationContainer.style.display = 'block';
+        } else {
+          paginationContainer.style.display = 'none';
+        }
+      }
+    }
 
     function filterCategory(category: string) {
+      currentCategory = category;
+      currentLimit = POSTS_PER_PAGE; // Reset limit when switching category
+
       filterButtons.forEach(b => {
         if (b.getAttribute('data-category') === category) {
           b.classList.add('active');
@@ -325,13 +394,13 @@ const formatDate = (date: Date) => {
         }
       });
 
-      posts.forEach(post => {
-        const postCategory = post.getAttribute('data-post-category');
-        if (category === 'all' || postCategory === category) {
-          (post as HTMLElement).style.display = 'flex';
-        } else {
-          (post as HTMLElement).style.display = 'none';
-        }
+      updatePostsVisibility();
+    }
+
+    if (loadMoreBtn) {
+      loadMoreBtn.addEventListener('click', () => {
+        currentLimit += POSTS_PER_PAGE;
+        updatePostsVisibility();
       });
     }
 

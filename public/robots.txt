@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Disallow indexing of Keystatic admin panel and API routes
+Disallow: /keystatic/
+Disallow: /api/
+
+Sitemap: https://smartvolt.ru/sitemap-index.xml

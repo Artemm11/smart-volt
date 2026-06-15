@@ -6,7 +6,16 @@ export const prerender = false;
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
-    const { name, contact, message } = body;
+    const { name, contact, message, honey } = body;
+
+    // Honeypot spam protection
+    if (honey) {
+      console.log('Spam bot submission blocked (Honeypot):', { name, contact, message });
+      return new Response(
+        JSON.stringify({ success: true, message: 'Заявка успешно отправлена!' }),
+        { status: 200, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
 
     // Validate inputs
     if (!name || !contact) {

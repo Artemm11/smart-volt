@@ -1,0 +1,40 @@
+---
+import settings from '../content/settings/index.json';
+import '../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ошибка 404 — Страница не найдена — {settings.siteName}</title>
+</head>
+<body style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; background: var(--bg-main);">
+  
+  <div class="card" style="max-width: 500px; width: 100%; text-align: center; padding: 3.5rem 2rem; border: 1px solid var(--accent); box-shadow: 0 0 20px rgba(0, 240, 255, 0.15), inset 0 0 15px rgba(0, 240, 255, 0.05); position: relative; overflow: hidden;">
+    <!-- Cyberpunk decorative corner lines -->
+    <div style="position: absolute; top: 0; left: 0; width: 15px; height: 15px; border-top: 3px solid var(--accent); border-left: 3px solid var(--accent);"></div>
+    <div style="position: absolute; top: 0; right: 0; width: 15px; height: 15px; border-top: 3px solid var(--accent); border-right: 3px solid var(--accent);"></div>
+    <div style="position: absolute; bottom: 0; left: 0; width: 15px; height: 15px; border-bottom: 3px solid var(--accent); border-left: 3px solid var(--accent);"></div>
+    <div style="position: absolute; bottom: 0; right: 0; width: 15px; height: 15px; border-bottom: 3px solid var(--accent); border-right: 3px solid var(--accent);"></div>
+
+    <div style="font-size: 6rem; font-weight: 900; font-family: var(--font-title); background: linear-gradient(135deg, #00f0ff 0%, #70ff00 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; margin-bottom: 1.5rem; letter-spacing: 2px; filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.4));">
+      404
+    </div>
+    
+    <h1 style="font-size: 1.75rem; margin-bottom: 1rem; color: var(--text-primary); text-transform: uppercase; letter-spacing: 1px; font-family: var(--font-title);">
+      Сбой системы
+    </h1>
+    
+    <p style="color: var(--text-secondary); margin-bottom: 2.5rem; font-size: 1rem; line-height: 1.6;">
+      Запрашиваемый ресурс не обнаружен в сети. Возможен разрыв соединения или ошибка в адресе.
+    </p>
+    
+    <a href="/" class="btn-submit" style="display: inline-flex; align-items: center; justify-content: center; padding: 0.8rem 2rem; font-size: 0.95rem; font-weight: 700; text-decoration: none; width: auto; margin: 0 auto; text-transform: uppercase; letter-spacing: 1px;">
+      <span>Вернуться на базу</span>
+    </a>
+  </div>
+
+</body>
+</html>
